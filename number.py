@@ -8,6 +8,7 @@ class Number(object):
 
     def __init__(self, pred, string=None):
         self._pred = pred
+        self._pred._succ = self
         self._succ = None
 
         if string:
@@ -15,6 +16,7 @@ class Number(object):
         else:
             self._string = None
             
+    # TODO necessary?
     @property
     def pred(self):
         return self._pred
@@ -60,7 +62,7 @@ class Number(object):
     def __mod__(self, other):
         temp = self
 
-        while temp - other:
+        while temp - other is not None:
             temp -= other
 
         return temp
@@ -73,19 +75,15 @@ class Number(object):
         return int(self._pred) + 1
 
     def __str__(self):
-        # return str(int(self))
         if self._string is not None:
             return self._string
 
-        # TODO replace!
         ten = Number.nine.succ
-        order = Number.one
         temp = self
         string = ""
-        while temp >= order:
-            print(str(int(temp % order)))
-            string = str(temp % order) + string
-            order *= ten
+        while temp:
+            string = (temp % ten)._string + string
+            temp /= ten
 
         return string
 
@@ -118,30 +116,29 @@ Number.seven = Number(Number.six,   "7")
 Number.eight = Number(Number.seven, "8")
 Number.nine  = Number(Number.eight, "9")
 
-print(str(Number.nine))
-print(str(Number.nine.succ))
-# if __name__ == "__main__":
-#     five = Number.five
-#     three = Number.three
-#     twenty = Number.from_python_int(20)
+if __name__ == "__main__":
+    five = Number.five
+    three = Number.three
+    twenty = Number.from_python_int(20)
 
-#     sums = [
-#         "five + three",
-#         "five - three",
-#         "three - five",
-#         "twenty / three",
-#         "twenty / five",
-#         "twenty % three",        
-#         "three % five",
-#         "three == three",
-#         "three == five",
-#         "three > five",
-#         "five > three",
-#         "three >= five",
-#         "three >= three",
-#         "five >= three"
+    sums = [
+        "five + three",
+        "five - three",
+        "three - five",
+        "twenty / three",
+        "twenty / five",
+        "twenty % three",        
+        "three % five",
+        "three % three",
+        "three == three",
+        "three == five",
+        "three > five",
+        "five > three",
+        "three >= five",
+        "three >= three",
+        "five >= three"
 
-#     ]
+    ]
 
-#     for sum_string in sums:
-#         print("%s\t=\t%s" % (sum_string, str(eval(sum_string))))
+    for sum_string in sums:
+        print("%s\t=\t%s" % (sum_string, str(eval(sum_string))))
