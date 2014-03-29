@@ -19,6 +19,12 @@ plenty of fun things that could be added:
       for __div__ but now my head hurts (does the series actually go 
         division-by-power < division < subtraction < addition > multiplication)?
     - Hack Python to get it to let you pass an arbitrary object as a list index!
+
+Copyright Brendan Jackman 2014
+
+Released under the terms of the GNU General Public License v3 - available in
+COPYING.txt (distributed with this file) and alternatively at
+https://gnu.org/licenses/gpl.txt
 """
 class Number(object):
     # Build a number that follows `pred`, whose string representationg is
