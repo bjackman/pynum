@@ -2,7 +2,7 @@ class Number(object):
     @classmethod
     def from_python_int(self, python_int):
         if python_int == 0:
-            return Zero()
+            return Number.zero
 
         return Number.from_python_int(python_int - 1).succ
 
@@ -37,6 +37,11 @@ class Number(object):
             return self
         return self.pred - other.pred
 
+    def __mul__(self, other):
+        temp = Number.zero
+        for _ in range(other):
+            temp += self
+
     def __eq__(self, other):
         return self is other or (self - other).__class__ is Zero
     def __gt__(self, other):
@@ -45,11 +50,11 @@ class Number(object):
         return self == other or self > other
 
     def __div__(self, other):
-        count = Zero()
+        count = Number.zero
         temp = self
         while temp:
             temp -= other
-            count += Zero().succ
+            count += Number.one
         return count
 
     def __mod__(self, other):
@@ -68,23 +73,21 @@ class Number(object):
         return int(self._pred) + 1
 
     def __str__(self):
-        return str(int(self))
-        # if self._string is not None:
-        #     return self._string
+        # return str(int(self))
+        if self._string is not None:
+            return self._string
 
-        # # TODO replace!
-        # ten = Number.from_python_int(10)
-        # order = 10
-        # temp = self
-        # string = ""
-        # while temp >= order:
-        #     string = str(temp % order) + string
-        #     temp *= ten
+        # TODO replace!
+        ten = Number.nine.succ
+        order = Number.one
+        temp = self
+        string = ""
+        while temp >= order:
+            print(str(int(temp % order)))
+            string = str(temp % order) + string
+            order *= ten
 
-        # if string == "":
-        #     return "0"
-        # else
-        #     return string
+        return string
 
 class Zero(Number):
     def __init__(self):
@@ -105,30 +108,40 @@ class Zero(Number):
         return False
 
 Number.zero = Zero()
-Number.one = Number(Number.zero, "1")
+Number.one   = Number(Number.zero,  "1")
+Number.two   = Number(Number.one,   "2")
+Number.three = Number(Number.two,   "3")
+Number.four  = Number(Number.three, "4")
+Number.five  = Number(Number.four,  "5")
+Number.six   = Number(Number.five,  "6")
+Number.seven = Number(Number.six,   "7")
+Number.eight = Number(Number.seven, "8")
+Number.nine  = Number(Number.eight, "9")
 
-if __name__ == "__main__":
-    five = Number.from_python_int(5)
-    three = Number.from_python_int(3)
-    twenty = Number.from_python_int(20)
+print(str(Number.nine))
+print(str(Number.nine.succ))
+# if __name__ == "__main__":
+#     five = Number.five
+#     three = Number.three
+#     twenty = Number.from_python_int(20)
 
-    sums = [
-        "five + three",
-        "five - three",
-        "three - five",
-        "twenty / three",
-        "twenty / five",
-        "twenty % three",        
-        "three % five",
-        "three == three",
-        "three == five",
-        "three > five",
-        "five > three",
-        "three >= five",
-        "three >= three",
-        "five >= three"
+#     sums = [
+#         "five + three",
+#         "five - three",
+#         "three - five",
+#         "twenty / three",
+#         "twenty / five",
+#         "twenty % three",        
+#         "three % five",
+#         "three == three",
+#         "three == five",
+#         "three > five",
+#         "five > three",
+#         "three >= five",
+#         "three >= three",
+#         "five >= three"
 
-    ]
+#     ]
 
-    for sum_string in sums:
-        print("%s\t=\t%s" % (sum_string, str(eval(sum_string))))
+#     for sum_string in sums:
+#         print("%s\t=\t%s" % (sum_string, str(eval(sum_string))))
