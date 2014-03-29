@@ -55,12 +55,25 @@ class Number(object):
 
         return temp
 
+    def __pow__(self, other):
+        temp = Number.one
+        for _ in range(other):
+            temp *= self
+
+        return temp
+
     def __eq__(self, other):
         return self is other or (self - other).__class__ is Zero
+    def __ne__(self, other):
+        return self is not other and (self - other).__class__ is not Zero
     def __gt__(self, other):
         return bool(self - other)
     def __ge__(self, other):
-        return self == other or self > other
+        return self == other or bool(self - other)
+    def __lt__(self, other):
+        return bool(other - self)
+    def __le__(self, other):
+        return self == other or bool(other - self)
 
     def __div__(self, other):
         count = Number.zero
