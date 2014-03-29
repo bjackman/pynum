@@ -21,6 +21,18 @@ plenty of fun things that could be added:
     - Hack Python to get it to let you pass an arbitrary object as a list index!
 """
 class Number(object):
+    # Build a number that follows `pred`, whose string representationg is
+    # `string`
+    def __init__(self, pred, string=None):
+        self._pred = pred
+        self._pred._succ = self
+        self._succ = None
+
+        if string:
+            self._string = string
+        else:
+            self._string = None
+
     # Construct a Number from a string
     @classmethod
     def from_string(_class, string):
@@ -34,18 +46,6 @@ class Number(object):
             order *= Number.ten
 
         return acc
-
-    # Build a number that follows `pred`, whose string representationg is
-    # `string`
-    def __init__(self, pred, string=None):
-        self._pred = pred
-        self._pred._succ = self
-        self._succ = None
-
-        if string:
-            self._string = string
-        else:
-            self._string = None
             
     # (This getter might come in handy if you implement negatives, I guess)
     @property
@@ -71,18 +71,12 @@ class Number(object):
         return self.pred - other.pred
 
     def __mul__(self, other):
-        temp = Number.zero
-        for _ in range(other):
-            temp += self
-
-        return temp
+        return (self.pred * other) + other
 
     def __pow__(self, other):
-        temp = Number.one
-        for _ in range(other):
-            temp *= self
-
-        return temp
+        if other.__class__ is Zero:
+            return other.succ
+        return (self ** other.pred) * self
 
     def __eq__(self, other):
         return self is other or (self - other).__class__ is Zero
@@ -102,7 +96,7 @@ class Number(object):
         temp  = self - other
         while temp is not None:
             temp -= other
-            count += Number.one
+            count = count.succ
         return count
 
     def __mod__(self, other):
@@ -115,10 +109,6 @@ class Number(object):
 
     def __nonzero__(self):
         return True
-
-    # FOR DEBUGGING ONLY!
-    def __int__(self):
-        return int(self._pred) + 1
 
     def __str__(self):
         if self._string is not None:
@@ -139,14 +129,14 @@ class Zero(Number):
         self._succ = None
         self._string = "0"
 
-    def __int__(self):
-        return 0
-
     def __sub__(self, other):
         if other.__class__ is Zero:
             return self
         # Negative numbers not implemented yet
         return None
+
+    def __mul__(self, other):
+        return self
 
     def __nonzero__(self):
         return False
