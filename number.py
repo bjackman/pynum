@@ -1,3 +1,25 @@
+"""
+An implementation of positive integer arithmetic. I was thinking about this late
+at night and decided the easiest way to stop it keeping me awake on subsequent
+nights would be to just implement it. It was quite fun getting to know the 
+Python data model a bit better.
+
+I made sure not to think about performance (that's boring). There are also
+plenty of fun things that could be added:
+    - Some of the other __*__ stuff is missing. See:
+      http://docs.python.org/2/reference/datamodel.html
+    - Negative numbers - there are a couple of different ways to implement this.
+    - I don't really know the maths but I think imaginary numbers might be quite
+      easy too, and maybe even complex?
+    - Bitwise operators
+    - Real numbers (?)
+    - addition > multiplication > exponentiation is a series. It would be nice
+      to just define __add__ and have __mul__ and __pow__ and <whatever you call
+      the "next" operation> inductively defined! I think you could do the same
+      for __div__ but now my head hurts (does the series actually go 
+        division-by-power < division < subtraction < addition > multiplication)?
+    - Hack Python to get it to let you pass an arbitrary object as a list index!
+"""
 class Number(object):
     # Construct a Number from a string
     @classmethod
@@ -129,6 +151,8 @@ class Zero(Number):
     def __nonzero__(self):
         return False
 
+# For bootstrapping the conversion to strings:
+
 Number.zero = Zero()
 
 Number.one   = Number(Number.zero,  "1")
@@ -154,35 +178,5 @@ Number._char_to_number = {
     "9":  Number.nine
 }
 
+# Just for convenience:
 Number.ten = Number.nine.succ
-
-if __name__ == "__main__":
-    five = Number.five
-    three = Number.three
-    ten = Number.nine.succ
-    twenty = ten + ten
-
-    sums = [
-        "five + three",
-        "five - three",
-        "three - five",
-        "twenty / three",
-        "twenty / five",
-        "three / twenty",
-        "twenty % three",        
-        "three % five",
-        "three % three",
-        "three == three",
-        "three == five",
-        "three > five",
-        "five > three",
-        "three >= five",
-        "three >= three",
-        "five >= three",
-        "three * five",
-        "five * three",
-        "twenty * three",
-    ]
-
-    for sum_string in sums:
-        print("%s\t=\t%s" % (sum_string, eval(sum_string)))
