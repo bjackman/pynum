@@ -44,6 +44,8 @@ class Number(object):
         for _ in range(other):
             temp += self
 
+        return temp
+
     def __eq__(self, other):
         return self is other or (self - other).__class__ is Zero
     def __gt__(self, other):
@@ -53,8 +55,8 @@ class Number(object):
 
     def __div__(self, other):
         count = Number.zero
-        temp = self
-        while temp:
+        temp  = self - other
+        while temp is not None:
             temp -= other
             count += Number.one
         return count
@@ -77,6 +79,8 @@ class Number(object):
     def __str__(self):
         if self._string is not None:
             return self._string
+
+        print(int(self))
 
         ten = Number.nine.succ
         temp = self
@@ -119,7 +123,10 @@ Number.nine  = Number(Number.eight, "9")
 if __name__ == "__main__":
     five = Number.five
     three = Number.three
-    twenty = Number.from_python_int(20)
+    ten = Number.nine.succ
+    twenty = ten + ten
+
+    print(twenty)
 
     sums = [
         "five + three",
@@ -127,6 +134,7 @@ if __name__ == "__main__":
         "three - five",
         "twenty / three",
         "twenty / five",
+        "three / twenty",
         "twenty % three",        
         "three % five",
         "three % three",
