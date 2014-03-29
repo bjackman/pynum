@@ -1,11 +1,20 @@
 class Number(object):
+    # Construct a Number from a string
     @classmethod
-    def from_python_int(self, python_int):
-        if python_int == 0:
-            return Number.zero
+    def from_string(_class, string):
+        char_list = [c for c in string]
+        order = Number.one
+        acc = Number.zero
 
-        return Number.from_python_int(python_int - 1).succ
+        while char_list:
+            char = char_list.pop()
+            acc += Number._char_to_number[char] * order
+            order *= Number.ten
 
+        return acc
+
+    # Build a number that follows `pred`, whose string representationg is
+    # `string`
     def __init__(self, pred, string=None):
         self._pred = pred
         self._pred._succ = self
@@ -16,7 +25,7 @@ class Number(object):
         else:
             self._string = None
             
-    # TODO necessary?
+    # (This getter might come in handy if you implement negatives, I guess)
     @property
     def pred(self):
         return self._pred
@@ -80,14 +89,12 @@ class Number(object):
         if self._string is not None:
             return self._string
 
-        print(int(self))
-
         ten = Number.nine.succ
         temp = self
         string = ""
         while temp:
             string = (temp % ten)._string + string
-            temp /= ten
+            temp /= Number.ten
 
         return string
 
@@ -110,6 +117,7 @@ class Zero(Number):
         return False
 
 Number.zero = Zero()
+
 Number.one   = Number(Number.zero,  "1")
 Number.two   = Number(Number.one,   "2")
 Number.three = Number(Number.two,   "3")
@@ -120,13 +128,26 @@ Number.seven = Number(Number.six,   "7")
 Number.eight = Number(Number.seven, "8")
 Number.nine  = Number(Number.eight, "9")
 
+Number._char_to_number = {
+    "0":  Number.zero,
+    "1":  Number.one,
+    "2":  Number.two,
+    "3":  Number.three,
+    "4":  Number.four,
+    "5":  Number.five,
+    "6":  Number.six,
+    "7":  Number.seven,
+    "8":  Number.eight,
+    "9":  Number.nine
+}
+
+Number.ten = Number.nine.succ
+
 if __name__ == "__main__":
     five = Number.five
     three = Number.three
     ten = Number.nine.succ
     twenty = ten + ten
-
-    print(twenty)
 
     sums = [
         "five + three",
@@ -144,9 +165,11 @@ if __name__ == "__main__":
         "five > three",
         "three >= five",
         "three >= three",
-        "five >= three"
-
+        "five >= three",
+        "three * five",
+        "five * three",
+        "twenty * three",
     ]
 
     for sum_string in sums:
-        print("%s\t=\t%s" % (sum_string, str(eval(sum_string))))
+        print("%s\t=\t%s" % (sum_string, eval(sum_string)))
